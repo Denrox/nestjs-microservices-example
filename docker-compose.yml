@@ -1,0 +1,82 @@
+version: '3'
+services:
+  gateway:
+    build: ./gateway
+    restart: always
+    hostname: gateway
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    networks:
+      - backend
+      - frontend
+  task:
+    build: ./task
+    restart: always
+    hostname: task
+    env_file:
+      - .env
+    networks:
+      - backend
+    links:
+      - db
+  token:
+    build: ./token
+    restart: always
+    hostname: token
+    env_file:
+      - .env
+    networks:
+      - backend
+    links:
+      - db
+  mailer:
+    build: ./mailer
+    restart: always
+    hostname: mailer
+    env_file:
+      - .env
+    networks:
+      - backend
+  permission:
+    build: ./permission
+    restart: always
+    hostname: permission
+    env_file:
+      - .env
+    networks:
+      - backend
+  user:
+    build: ./user
+    restart: always
+    hostname: user
+    env_file:
+      - .env
+    networks:
+      - backend
+    links:
+      - mailer
+      - db
+  db:
+    image: 'mongo:3.7'
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - "./db/data/db-files:/data/db"
+      - "./db/init/:/docker-entrypoint-initdb.d/"
+    ports:
+      - 27017:27017
+    networks:
+      - backend
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    external:
+      name: infrastructure

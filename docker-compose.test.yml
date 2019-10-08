@@ -1,0 +1,79 @@
+version: '3'
+services:
+  task:
+    build: ./task
+    restart: always
+    hostname: task
+    env_file:
+      - .env.test
+    networks:
+      - backend
+    links:
+      - db
+    ports:
+      - ${TASK_SERVICE_PORT}:${TASK_SERVICE_PORT}
+  token:
+    build: ./token
+    restart: always
+    hostname: token
+    env_file:
+      - .env.test
+    networks:
+      - backend
+    links:
+      - db
+    ports:
+      - ${TOKEN_SERVICE_PORT}:${TOKEN_SERVICE_PORT}
+  mailer:
+    build: ./mailer
+    restart: always
+    hostname: mailer
+    env_file:
+      - .env.test
+    networks:
+      - backend
+    ports:
+      - ${MAILER_SERVICE_PORT}:${MAILER_SERVICE_PORT}
+  permission:
+    build: ./permission
+    restart: always
+    hostname: permission
+    env_file:
+      - .env.test
+    networks:
+      - backend
+    ports:
+      - 8005:8005
+  user:
+    build: ./user
+    restart: always
+    hostname: user
+    env_file:
+      - .env.test
+    networks:
+      - backend
+    links:
+      - mailer
+      - db
+    ports:
+      - ${USER_SERVICE_PORT}:${USER_SERVICE_PORT}
+  db:
+    image: 'mongo:3.7'
+    restart: always
+    hostname: db
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+    volumes:
+      - "./db/init/:/docker-entrypoint-initdb.d/"
+    ports:
+      - 27017:27017
+    networks:
+      - backend
+    env_file:
+      - .env.test
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    external:
+      name: infrastructure

@@ -1,0 +1,15 @@
+{
+  "name": "smoothday-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "npm --prefix task run lint && npm --prefix user run lint && npm --prefix token run lint && npm --prefix gateway run lint && npm --prefix mailer run lint && npm --prefix permission run lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Denrox/nestjs-microservices-example.git"
+  },
+  "author": "",
+  "license": "ISC"
+}
