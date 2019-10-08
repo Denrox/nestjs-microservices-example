@@ -3,8 +3,6 @@
 This example is basically an API for some task manager application. It provides a possibility to perform sign up users, confirm user's emails, manage user's tasks.
 ## Running the example with docker-compose
 Execute `cp .env.example .env && docker-compose up -d` from the root of the repository
-## Running example in a development mode
-To run the example in development mode you need
 ## Accessing the API itself and swagger docs for the API
 - Once you launch the API it will be accessible on port 8000.
 - Swagger docs for the API will be accessible locally via URI "**http://localhost:8000/api**"
