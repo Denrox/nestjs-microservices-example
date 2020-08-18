@@ -12,7 +12,7 @@ import {
   HttpStatus
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiUseTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
 
 import { Authorization } from './decorators/authorization.decorator';
 import { Permission } from './decorators/permission.decorator';
@@ -34,7 +34,7 @@ import { TaskIdDto } from './interfaces/task/dto/task-id.dto';
 
 
 @Controller('tasks')
-@ApiUseTags('tasks')
+@ApiTags('tasks')
 export class TasksController {
 
   constructor(

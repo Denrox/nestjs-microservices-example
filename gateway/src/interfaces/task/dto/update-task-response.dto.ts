@@ -1,10 +1,10 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { ITask } from '../task.interface';
 
 export class UpdateTaskResponseDto {
-  @ApiModelProperty({example: 'task_update_by_id_success'})
+  @ApiProperty({example: 'task_update_by_id_success'})
   message: string;
-  @ApiModelProperty({
+  @ApiProperty({
     example: {
       task: {
         notification_id: null,
@@ -18,11 +18,12 @@ export class UpdateTaskResponseDto {
         updated_at: +new Date(),
         id: '5d987c3bfb881ec86b476bcc'
       }
-    }
+    },
+    nullable: true
   })
   data: {
     task: ITask;
-  } | null;
-  @ApiModelProperty({example: null})
-  errors: {[key: string]: any} | null;
+  };
+  @ApiProperty({example: null, nullable: true})
+  errors: {[key: string]: any};
 }

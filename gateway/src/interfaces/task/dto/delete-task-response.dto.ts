@@ -1,10 +1,10 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class DeleteTaskResponseDto {
-  @ApiModelProperty({example: 'task_delete_by_id_success'})
+  @ApiProperty({example: 'task_delete_by_id_success'})
   message: string;
-  @ApiModelProperty({example: null})
+  @ApiProperty({example: null, nullable: true, type: 'null'})
   data: null;
-  @ApiModelProperty({example: null})
-  errors: {[key: string]: any} | null;
+  @ApiProperty({example: null, nullable: true})
+  errors: {[key: string]: any};
 }

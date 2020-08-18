@@ -1,12 +1,12 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
-  @ApiModelProperty({
+  @ApiProperty({
     uniqueItems: true,
     example: 'test1@denrox.com'
   })
   email: string;
-  @ApiModelProperty({
+  @ApiProperty({
     minLength: 6,
     example: 'test11'
   })

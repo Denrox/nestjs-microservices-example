@@ -1,21 +1,22 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import { IUser } from '../user.interface';
 
 export class GetUserByTokenResponseDto {
-  @ApiModelProperty({example: 'user_get_by_id_success'})
+  @ApiProperty({example: 'user_get_by_id_success'})
   message: string;
-  @ApiModelProperty({
+  @ApiProperty({
     example: {
       user: {
         email: 'test@denrox.com',
         is_confirmed: true,
         id: '5d987c3bfb881ec86b476bcc'
       }
-    }
+    },
+    nullable: true
   })
   data: {
     user: IUser,
-  } | null;
-  @ApiModelProperty({example: null})
-  errors: {[key: string]: any} | null;
+  };
+  @ApiProperty({example: null, nullable: true})
+  errors: {[key: string]: any};
 }

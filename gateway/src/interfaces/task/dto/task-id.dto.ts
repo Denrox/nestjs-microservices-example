@@ -1,6 +1,6 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class TaskIdDto {
-  @ApiModelProperty()
+  @ApiProperty()
   id: string
 }

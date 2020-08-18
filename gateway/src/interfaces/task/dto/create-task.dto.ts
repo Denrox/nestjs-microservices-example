@@ -1,12 +1,12 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateTaskDto {
-  @ApiModelProperty({example: 'test task'})
+  @ApiProperty({example: 'test task'})
   name: string;
-  @ApiModelProperty({example: 'test task description'})
+  @ApiProperty({example: 'test task description'})
   description: string;
-  @ApiModelProperty({example: +new Date()})
+  @ApiProperty({example: +new Date()})
   start_time: number;
-  @ApiModelProperty({example: 90000})
+  @ApiProperty({example: 90000})
   duration: number;
 }

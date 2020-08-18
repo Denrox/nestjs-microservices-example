@@ -11,7 +11,7 @@ import {
   Param
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { ApiUseTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
 
 import { Authorization } from './decorators/authorization.decorator';
 import { IAuthorizedRequest } from './interfaces/common/authorized-request.interface';
@@ -32,7 +32,7 @@ import { ConfirmUserDto } from './interfaces/user/dto/confirm-user.dto';
 import { ConfirmUserResponseDto } from './interfaces/user/dto/confirm-user-response.dto';
 
 @Controller('users')
-@ApiUseTags('users')
+@ApiTags('users')
 export class UsersController {
 
   constructor(

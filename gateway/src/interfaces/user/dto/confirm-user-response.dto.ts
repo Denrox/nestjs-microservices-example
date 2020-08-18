@@ -1,10 +1,10 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ConfirmUserResponseDto {
-  @ApiModelProperty({example: 'user_confirm_success'})
+  @ApiProperty({example: 'user_confirm_success'})
   message: string;
-  @ApiModelProperty({example: null})
+  @ApiProperty({example: null, nullable: true, type: 'null'})
   data: null;
-  @ApiModelProperty({example: null})
-  errors: {[key: string]: any} | null;
+  @ApiProperty({example: null, nullable: true})
+  errors: {[key: string]: any};
 }
