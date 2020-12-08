@@ -8,14 +8,13 @@ import { IUserLink } from '../interfaces/user-link.interface';
 
 @Injectable()
 export class UserService {
-
   constructor(
     @InjectModel('User') private readonly userModel: Model<IUser>,
     @InjectModel('UserLink') private readonly userLinkModel: Model<IUserLink>,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {}
 
-  public async searchUser(params: {email: string}): Promise<IUser[]> {
+  public async searchUser(params: { email: string }): Promise<IUser[]> {
     return this.userModel.find(params).exec();
   }
 
@@ -23,8 +22,11 @@ export class UserService {
     return this.userModel.findById(id).exec();
   }
 
-  public async updateUserById(id: string, userParams: {is_confirmed: boolean}): Promise<IUser> {
-    return this.userModel.updateOne({_id: id}, userParams).exec();
+  public async updateUserById(
+    id: string,
+    userParams: { is_confirmed: boolean },
+  ): Promise<IUser> {
+    return this.userModel.updateOne({ _id: id }, userParams).exec();
   }
 
   public async createUser(user: IUser): Promise<IUser> {
@@ -34,7 +36,7 @@ export class UserService {
 
   public async createUserLink(id: string): Promise<IUserLink> {
     const userLinkModel = new this.userLinkModel({
-      user_id: id
+      user_id: id,
     });
     return await userLinkModel.save();
   }
@@ -43,12 +45,16 @@ export class UserService {
     return this.userLinkModel.find({ link, is_used: false }).exec();
   }
 
-  public async updateUserLinkById(id: string, linkParams: {is_used: boolean}): Promise<IUserLink> {
-    return this.userLinkModel.updateOne({_id: id}, linkParams);
+  public async updateUserLinkById(
+    id: string,
+    linkParams: { is_used: boolean },
+  ): Promise<IUserLink> {
+    return this.userLinkModel.updateOne({ _id: id }, linkParams);
   }
 
   public getConfirmationLink(link: string): string {
-    return `${this.configService.get('baseUri')}:${this.configService.get('gatewayPort')}/users/confirm/${link}`;
+    return `${this.configService.get('baseUri')}:${this.configService.get(
+      'gatewayPort',
+    )}/users/confirm/${link}`;
   }
-
 }

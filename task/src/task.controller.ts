@@ -11,12 +11,12 @@ import { ITaskUpdateByIdResponse } from './interfaces/task-update-by-id-response
 
 @Controller()
 export class TaskController {
-  constructor(
-    private readonly taskService: TaskService
-  ) {}
+  constructor(private readonly taskService: TaskService) {}
 
   @MessagePattern('task_search_by_user_id')
-  public async taskSearchByUserId(userId: string): Promise<ITaskSearchByUserResponse> {
+  public async taskSearchByUserId(
+    userId: string,
+  ): Promise<ITaskSearchByUserResponse> {
     let result: ITaskSearchByUserResponse;
 
     if (userId) {
@@ -24,13 +24,13 @@ export class TaskController {
       result = {
         status: HttpStatus.OK,
         message: 'task_search_by_user_id_success',
-        tasks
+        tasks,
       };
     } else {
       result = {
         status: HttpStatus.BAD_REQUEST,
         message: 'task_search_by_user_id_bad_request',
-        tasks: null
+        tasks: null,
       };
     }
 
@@ -38,53 +38,55 @@ export class TaskController {
   }
 
   @MessagePattern('task_update_by_id')
-  public async taskUpdateById(
-    params: {task: ITaskUpdateParams, id: string, userId: string}
-  ): Promise<ITaskUpdateByIdResponse> {
+  public async taskUpdateById(params: {
+    task: ITaskUpdateParams;
+    id: string;
+    userId: string;
+  }): Promise<ITaskUpdateByIdResponse> {
     let result: ITaskUpdateByIdResponse;
     if (params.id) {
-        try {
-          const task = await this.taskService.findTaskById(params.id);
-          if (task) {
-            if (task.user_id === params.userId) {
-              const updatedTask = Object.assign(task, params.task);
-              await updatedTask.save();
-              result = {
-                status: HttpStatus.OK,
-                message: 'task_update_by_id_success',
-                task: updatedTask,
-                errors: null
-              };
-            } else {
-              result = {
-                status: HttpStatus.FORBIDDEN,
-                message: 'task_update_by_id_forbidden',
-                task: null,
-                errors: null
-              };
-            }
+      try {
+        const task = await this.taskService.findTaskById(params.id);
+        if (task) {
+          if (task.user_id === params.userId) {
+            const updatedTask = Object.assign(task, params.task);
+            await updatedTask.save();
+            result = {
+              status: HttpStatus.OK,
+              message: 'task_update_by_id_success',
+              task: updatedTask,
+              errors: null,
+            };
           } else {
             result = {
-              status: HttpStatus.NOT_FOUND,
-              message: 'task_update_by_id_not_found',
+              status: HttpStatus.FORBIDDEN,
+              message: 'task_update_by_id_forbidden',
               task: null,
-              errors: null
+              errors: null,
             };
           }
-        } catch (e) {
+        } else {
           result = {
-            status: HttpStatus.PRECONDITION_FAILED,
-            message: 'task_update_by_id_precondition_failed',
+            status: HttpStatus.NOT_FOUND,
+            message: 'task_update_by_id_not_found',
             task: null,
-            errors: e.errors
+            errors: null,
           };
         }
+      } catch (e) {
+        result = {
+          status: HttpStatus.PRECONDITION_FAILED,
+          message: 'task_update_by_id_precondition_failed',
+          task: null,
+          errors: e.errors,
+        };
+      }
     } else {
       result = {
         status: HttpStatus.BAD_REQUEST,
         message: 'task_update_by_id_bad_request',
         task: null,
-        errors: null
+        errors: null,
       };
     }
 
@@ -104,14 +106,14 @@ export class TaskController {
           status: HttpStatus.CREATED,
           message: 'task_create_success',
           task,
-          errors: null
+          errors: null,
         };
       } catch (e) {
         result = {
           status: HttpStatus.PRECONDITION_FAILED,
           message: 'task_create_precondition_failed',
           task: null,
-          errors: e.errors
+          errors: e.errors,
         };
       }
     } else {
@@ -119,7 +121,7 @@ export class TaskController {
         status: HttpStatus.BAD_REQUEST,
         message: 'task_create_bad_request',
         task: null,
-        errors: null
+        errors: null,
       };
     }
 
@@ -127,7 +129,10 @@ export class TaskController {
   }
 
   @MessagePattern('task_delete_by_id')
-  public async taskDeleteForUser(params: {userId: string, id: string}): Promise<ITaskDeleteResponse> {
+  public async taskDeleteForUser(params: {
+    userId: string;
+    id: string;
+  }): Promise<ITaskDeleteResponse> {
     let result: ITaskDeleteResponse;
 
     if (params && params.userId && params.id) {
@@ -140,38 +145,37 @@ export class TaskController {
             result = {
               status: HttpStatus.OK,
               message: 'task_delete_by_id_success',
-              errors: null
+              errors: null,
             };
           } else {
             result = {
               status: HttpStatus.FORBIDDEN,
               message: 'task_delete_by_id_forbidden',
-              errors: null
+              errors: null,
             };
           }
         } else {
           result = {
             status: HttpStatus.NOT_FOUND,
             message: 'task_delete_by_id_not_found',
-            errors: null
+            errors: null,
           };
         }
       } catch (e) {
         result = {
           status: HttpStatus.FORBIDDEN,
           message: 'task_delete_by_id_forbidden',
-          errors: null
+          errors: null,
         };
       }
     } else {
       result = {
         status: HttpStatus.BAD_REQUEST,
         message: 'task_delete_by_id_bad_request',
-        errors: null
+        errors: null,
       };
     }
 
     return result;
   }
-
 }

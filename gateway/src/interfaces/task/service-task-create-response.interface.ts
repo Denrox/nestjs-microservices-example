@@ -4,5 +4,5 @@ export interface IServiceTaskCreateResponse {
   status: number;
   message: string;
   task: ITask | null;
-  errors: {[key: string]: any};
+  errors: { [key: string]: any };
 }

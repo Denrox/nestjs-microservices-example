@@ -19,7 +19,7 @@ describe('Tasks (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule]
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -52,7 +52,7 @@ describe('Tasks (e2e)', () => {
       .expect({
         message: 'token_decode_unauthorized',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -64,7 +64,7 @@ describe('Tasks (e2e)', () => {
       .expect({
         message: 'token_decode_unauthorized',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -78,7 +78,7 @@ describe('Tasks (e2e)', () => {
       .expect({
         message: 'token_decode_unauthorized',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -92,7 +92,7 @@ describe('Tasks (e2e)', () => {
       .expect({
         message: 'permission_check_forbidden',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -104,7 +104,7 @@ describe('Tasks (e2e)', () => {
       .expect({
         message: 'token_decode_unauthorized',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -117,7 +117,7 @@ describe('Tasks (e2e)', () => {
       .expect({
         message: 'token_decode_unauthorized',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -130,18 +130,24 @@ describe('Tasks (e2e)', () => {
       .expect({
         message: 'permission_check_forbidden',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
 
   it('/users/confirm/:link (GET) - should confirm user', async () => {
-    user = await mongoose.connection.collection('users').find({
-      email: userSignupRequestSuccess.email
-    }).toArray();
-    const userConfirmation = await mongoose.connection.collection('user_links').find({
-      user_id: user[0]._id.toString()
-    }).toArray();
+    user = await mongoose.connection
+      .collection('users')
+      .find({
+        email: userSignupRequestSuccess.email,
+      })
+      .toArray();
+    const userConfirmation = await mongoose.connection
+      .collection('user_links')
+      .find({
+        user_id: user[0]._id.toString(),
+      })
+      .toArray();
 
     return request(app.getHttpServer())
       .get(`/users/confirm/${userConfirmation[0].link}`)
@@ -150,7 +156,7 @@ describe('Tasks (e2e)', () => {
       .expect({
         message: 'user_confirm_success',
         errors: null,
-        data: null
+        data: null,
       });
   });
 
@@ -171,7 +177,7 @@ describe('Tasks (e2e)', () => {
         data: {
           task: {
             notification_id: null,
-            name:  taskCreateRequestSuccess.name,
+            name: taskCreateRequestSuccess.name,
             description: taskCreateRequestSuccess.description,
             start_time: taskCreateRequestSuccess.start_time,
             duration: taskCreateRequestSuccess.duration,
@@ -179,10 +185,10 @@ describe('Tasks (e2e)', () => {
             is_solved: false,
             created_at: 'fake_value',
             updated_at: 'fake_value',
-            id: 'fake_value'
-          }
+            id: 'fake_value',
+          },
         },
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -198,35 +204,33 @@ describe('Tasks (e2e)', () => {
         res.body.errors.start_time.properties = 'fake_properties';
         res.body.errors.name.properties = 'fake_properties';
       })
-      .expect(
-        {
-          message: 'task_create_precondition_failed',
-          data: null,
-          errors: {
-            duration: {
-              message: 'Duration can not be empty',
-              name: 'ValidatorError',
-              properties: 'fake_properties',
-              kind: 'required',
-              path: 'duration'
-            },
-            start_time: {
-              message: 'Start time can not be empty',
-              name: 'ValidatorError',
-              properties: 'fake_properties',
-              kind: 'required',
-              path: 'start_time'
-            },
-            name: {
-              message: 'Name can not be empty',
-              name: 'ValidatorError',
-              properties: 'fake_properties',
-              kind: 'required',
-              path: 'name'
-            }
-          }
-        }
-      )
+      .expect({
+        message: 'task_create_precondition_failed',
+        data: null,
+        errors: {
+          duration: {
+            message: 'Duration can not be empty',
+            name: 'ValidatorError',
+            properties: 'fake_properties',
+            kind: 'required',
+            path: 'duration',
+          },
+          start_time: {
+            message: 'Start time can not be empty',
+            name: 'ValidatorError',
+            properties: 'fake_properties',
+            kind: 'required',
+            path: 'start_time',
+          },
+          name: {
+            message: 'Name can not be empty',
+            name: 'ValidatorError',
+            properties: 'fake_properties',
+            kind: 'required',
+            path: 'name',
+          },
+        },
+      })
       .end(done);
   });
 
@@ -239,28 +243,26 @@ describe('Tasks (e2e)', () => {
         res.body.data.tasks[0].created_at = 'fake_value';
         res.body.data.tasks[0].updated_at = 'fake_value';
       })
-      .expect(
-        {
-          message: 'task_search_by_user_id_success',
-          data: {
-            tasks: [
-              {
-                notification_id: null,
-                name: taskCreateRequestSuccess.name,
-                description: taskCreateRequestSuccess.description,
-                start_time: taskCreateRequestSuccess.start_time,
-                duration: taskCreateRequestSuccess.duration,
-                created_at: 'fake_value',
-                updated_at: 'fake_value',
-                user_id: user[0]._id.toString(),
-                is_solved: false,
-                id: taskId
-              }
-            ]
-          },
-          errors: null
-        }
-      )
+      .expect({
+        message: 'task_search_by_user_id_success',
+        data: {
+          tasks: [
+            {
+              notification_id: null,
+              name: taskCreateRequestSuccess.name,
+              description: taskCreateRequestSuccess.description,
+              start_time: taskCreateRequestSuccess.start_time,
+              duration: taskCreateRequestSuccess.duration,
+              created_at: 'fake_value',
+              updated_at: 'fake_value',
+              user_id: user[0]._id.toString(),
+              is_solved: false,
+              id: taskId,
+            },
+          ],
+        },
+        errors: null,
+      })
       .end(done);
   });
 
@@ -272,7 +274,7 @@ describe('Tasks (e2e)', () => {
       .expect({
         message: 'token_decode_unauthorized',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -283,7 +285,7 @@ describe('Tasks (e2e)', () => {
       .set('Authorization', userToken)
       .send({
         ...taskUpdateRequestSuccess,
-        user_id: user[0]._id.toString() + 1
+        user_id: user[0]._id.toString() + 1,
       })
       .expect(412)
       .expect((res) => {
@@ -298,9 +300,9 @@ describe('Tasks (e2e)', () => {
             name: 'ValidatorError',
             properties: 'fake_properties',
             kind: 'user defined',
-            path: 'user_id'
-          }
-        }
+            path: 'user_id',
+          },
+        },
       })
       .end(done);
   });
@@ -328,10 +330,10 @@ describe('Tasks (e2e)', () => {
             updated_at: 'fake_value',
             user_id: user[0]._id.toString(),
             is_solved: taskUpdateRequestSuccess.is_solved,
-            id: taskId
-          }
+            id: taskId,
+          },
         },
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -344,7 +346,7 @@ describe('Tasks (e2e)', () => {
       .expect({
         message: 'token_decode_unauthorized',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -358,9 +360,8 @@ describe('Tasks (e2e)', () => {
       .expect({
         message: 'task_delete_by_id_success',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
-
 });

@@ -5,12 +5,7 @@ import { PermissionController } from './permission.controller';
 
 @Module({
   imports: [],
-  controllers: [
-    PermissionController
-  ],
-  providers: [
-    ConfigService,
-    ConfirmedStrategyService
-  ]
+  controllers: [PermissionController],
+  providers: [ConfigService, ConfirmedStrategyService],
 })
 export class PermissionModule {}

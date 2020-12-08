@@ -8,7 +8,7 @@ import {
   Inject,
   HttpStatus,
   HttpException,
-  Param
+  Param,
 } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
@@ -34,167 +34,170 @@ import { ConfirmUserResponseDto } from './interfaces/user/dto/confirm-user-respo
 @Controller('users')
 @ApiTags('users')
 export class UsersController {
-
   constructor(
     @Inject('TOKEN_SERVICE') private readonly tokenServiceClient: ClientProxy,
-    @Inject('USER_SERVICE') private readonly userServiceClient: ClientProxy
+    @Inject('USER_SERVICE') private readonly userServiceClient: ClientProxy,
   ) {}
 
   @Get()
   @Authorization(true)
   @ApiOkResponse({
-    type: GetUserByTokenResponseDto
+    type: GetUserByTokenResponseDto,
   })
   public async getUserByToken(
-    @Req() request: IAuthorizedRequest
+    @Req() request: IAuthorizedRequest,
   ): Promise<GetUserByTokenResponseDto> {
     const userInfo = request.user;
 
-    const userResponse: IServiceUserGetByIdResponse = await this.userServiceClient.send(
-      'user_get_by_id',
-      userInfo.id
-    ).toPromise();
+    const userResponse: IServiceUserGetByIdResponse = await this.userServiceClient
+      .send('user_get_by_id', userInfo.id)
+      .toPromise();
 
     return {
       message: userResponse.message,
       data: {
-        user: userResponse.user
+        user: userResponse.user,
       },
-      errors: null
+      errors: null,
     };
   }
 
   @Post()
   @ApiCreatedResponse({
-    type: CreateUserResponseDto
+    type: CreateUserResponseDto,
   })
   public async createUser(
-    @Body() userRequest: CreateUserDto
+    @Body() userRequest: CreateUserDto,
   ): Promise<CreateUserResponseDto> {
-    const createUserResponse: IServiceUserCreateResponse = await this.userServiceClient.send(
-      'user_create',
-      userRequest
-    ).toPromise();
+    const createUserResponse: IServiceUserCreateResponse = await this.userServiceClient
+      .send('user_create', userRequest)
+      .toPromise();
     if (createUserResponse.status !== HttpStatus.CREATED) {
-      throw new HttpException({
-        message: createUserResponse.message,
-        data: null,
-        errors: createUserResponse.errors
-      }, createUserResponse.status);
+      throw new HttpException(
+        {
+          message: createUserResponse.message,
+          data: null,
+          errors: createUserResponse.errors,
+        },
+        createUserResponse.status,
+      );
     }
 
-    const createTokenResponse: IServiveTokenCreateResponse = await this.tokenServiceClient.send('token_create', {
-      userId: createUserResponse.user.id
-    }).toPromise();
+    const createTokenResponse: IServiveTokenCreateResponse = await this.tokenServiceClient
+      .send('token_create', {
+        userId: createUserResponse.user.id,
+      })
+      .toPromise();
 
     return {
       message: createUserResponse.message,
       data: {
         user: createUserResponse.user,
-        token: createTokenResponse.token
+        token: createTokenResponse.token,
       },
-      errors: null
+      errors: null,
     };
   }
 
   @Post('/login')
   @ApiCreatedResponse({
-    type: LoginUserResponseDto
+    type: LoginUserResponseDto,
   })
   public async loginUser(
-    @Body() loginRequest: LoginUserDto
+    @Body() loginRequest: LoginUserDto,
   ): Promise<LoginUserResponseDto> {
-    const getUserResponse: IServiceUserSearchResponse = await this.userServiceClient.send(
-      'user_search_by_credentials',
-      loginRequest
-    ).toPromise();
+    const getUserResponse: IServiceUserSearchResponse = await this.userServiceClient
+      .send('user_search_by_credentials', loginRequest)
+      .toPromise();
 
     if (getUserResponse.status !== HttpStatus.OK) {
       throw new HttpException(
         {
           message: getUserResponse.message,
           data: null,
-          errors: null
+          errors: null,
         },
-        HttpStatus.UNAUTHORIZED
+        HttpStatus.UNAUTHORIZED,
       );
     }
 
-    const createTokenResponse: IServiveTokenCreateResponse = await this.tokenServiceClient.send('token_create', {
-      userId: getUserResponse.user.id
-    }).toPromise();
+    const createTokenResponse: IServiveTokenCreateResponse = await this.tokenServiceClient
+      .send('token_create', {
+        userId: getUserResponse.user.id,
+      })
+      .toPromise();
 
     return {
       message: createTokenResponse.message,
       data: {
-        token: createTokenResponse.token
+        token: createTokenResponse.token,
       },
-      errors: null
+      errors: null,
     };
   }
 
   @Put('/logout')
   @Authorization(true)
   @ApiCreatedResponse({
-    type: LogoutUserResponseDto
+    type: LogoutUserResponseDto,
   })
   public async logoutUser(
-    @Req() request: IAuthorizedRequest
+    @Req() request: IAuthorizedRequest,
   ): Promise<LogoutUserResponseDto> {
     const userInfo = request.user;
 
-    const destroyTokenResponse: IServiceTokenDestroyResponse = await this.tokenServiceClient.send('token_destroy', {
-      userId: userInfo.id
-    }).toPromise();
+    const destroyTokenResponse: IServiceTokenDestroyResponse = await this.tokenServiceClient
+      .send('token_destroy', {
+        userId: userInfo.id,
+      })
+      .toPromise();
 
     if (destroyTokenResponse.status !== HttpStatus.OK) {
       throw new HttpException(
         {
           message: destroyTokenResponse.message,
           data: null,
-          errors: destroyTokenResponse.errors
+          errors: destroyTokenResponse.errors,
         },
-        destroyTokenResponse.status
+        destroyTokenResponse.status,
       );
     }
 
     return {
       message: destroyTokenResponse.message,
       errors: null,
-      data: null
+      data: null,
     };
   }
 
   @Get('/confirm/:link')
   @ApiCreatedResponse({
-    type: ConfirmUserResponseDto
+    type: ConfirmUserResponseDto,
   })
   public async confirmUser(
-    @Param() params: ConfirmUserDto
+    @Param() params: ConfirmUserDto,
   ): Promise<ConfirmUserResponseDto> {
-    const confirmUserResponse: IServiceUserConfirmResponse = await this.userServiceClient.send(
-      'user_confirm',
-      {
-        link: params.link
-      }
-    ).toPromise();
+    const confirmUserResponse: IServiceUserConfirmResponse = await this.userServiceClient
+      .send('user_confirm', {
+        link: params.link,
+      })
+      .toPromise();
 
     if (confirmUserResponse.status !== HttpStatus.OK) {
       throw new HttpException(
         {
           message: confirmUserResponse.message,
           data: null,
-          errors: confirmUserResponse.errors
+          errors: confirmUserResponse.errors,
         },
-        confirmUserResponse.status
+        confirmUserResponse.status,
       );
     }
 
     return {
       message: confirmUserResponse.message,
       errors: null,
-      data: null
+      data: null,
     };
   }
-
 }

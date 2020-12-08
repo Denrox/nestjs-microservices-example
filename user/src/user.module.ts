@@ -11,24 +11,22 @@ import { UserLinkSchema } from './schemas/user-link.schema';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
-      useClass: MongoConfigService
+      useClass: MongoConfigService,
     }),
     MongooseModule.forFeature([
       {
         name: 'User',
         schema: UserSchema,
-        collection: 'users'
+        collection: 'users',
       },
       {
         name: 'UserLink',
         schema: UserLinkSchema,
-        collection: 'user_links'
-      }
-    ])
+        collection: 'user_links',
+      },
+    ]),
   ],
-  controllers: [
-    UserController
-  ],
+  controllers: [UserController],
   providers: [
     UserService,
     ConfigService,
@@ -38,10 +36,8 @@ import { UserLinkSchema } from './schemas/user-link.schema';
         const mailerServiceOptions = configService.get('mailerService');
         return ClientProxyFactory.create(mailerServiceOptions);
       },
-      inject: [
-        ConfigService
-      ]
-    }
-  ]
+      inject: [ConfigService],
+    },
+  ],
 })
 export class UserModule {}

@@ -9,7 +9,7 @@ async function bootstrap() {
     .addTag('users')
     .addTag('tasks')
     .setVersion('1.0')
-  .build();
+    .build();
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
   await app.listen(app.get('ConfigService').get('port'));

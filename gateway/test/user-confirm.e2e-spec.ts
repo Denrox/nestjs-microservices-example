@@ -16,7 +16,7 @@ describe('Users Confirm Email (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule]
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -58,10 +58,10 @@ describe('Users Confirm Email (e2e)', () => {
           user: {
             email: 'fake_value',
             is_confirmed: false,
-            id: 'fake_value'
-          }
+            id: 'fake_value',
+          },
         },
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -82,19 +82,25 @@ describe('Users Confirm Email (e2e)', () => {
       .expect({
         message: 'user_confirm_not_found',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
 
   it('/users/confirm/:link (GET) - should succeed with a valid link', async () => {
-    const user = await mongoose.connection.collection('users').find({
-      email: userSignupRequestSuccess.email
-    }).toArray();
+    const user = await mongoose.connection
+      .collection('users')
+      .find({
+        email: userSignupRequestSuccess.email,
+      })
+      .toArray();
 
-    userConfirmation = await mongoose.connection.collection('user_links').find({
-      user_id: user[0]._id.toString()
-    }).toArray();
+    userConfirmation = await mongoose.connection
+      .collection('user_links')
+      .find({
+        user_id: user[0]._id.toString(),
+      })
+      .toArray();
 
     return request(app.getHttpServer())
       .get(`/users/confirm/${userConfirmation[0].link}`)
@@ -103,7 +109,7 @@ describe('Users Confirm Email (e2e)', () => {
       .expect({
         message: 'user_confirm_success',
         errors: null,
-        data: null
+        data: null,
       });
   });
 
@@ -123,10 +129,10 @@ describe('Users Confirm Email (e2e)', () => {
           user: {
             email: 'fake_value',
             is_confirmed: true,
-            id: 'fake_value'
-          }
+            id: 'fake_value',
+          },
         },
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -139,8 +145,7 @@ describe('Users Confirm Email (e2e)', () => {
       .expect({
         message: 'user_confirm_not_found',
         data: null,
-        errors: null
+        errors: null,
       });
   });
-
 });

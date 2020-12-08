@@ -10,23 +10,19 @@ import { TokenSchema } from './schemas/token.schema';
 @Module({
   imports: [
     JwtModule.registerAsync({
-      useClass: JwtConfigService
+      useClass: JwtConfigService,
     }),
     MongooseModule.forRootAsync({
-      useClass: MongoConfigService
+      useClass: MongoConfigService,
     }),
     MongooseModule.forFeature([
       {
         name: 'Token',
-        schema: TokenSchema
-      }
-    ])
+        schema: TokenSchema,
+      },
+    ]),
   ],
-  controllers: [
-    TokenController
-  ],
-  providers: [
-    TokenService
-  ]
+  controllers: [TokenController],
+  providers: [TokenService],
 })
 export class TokenModule {}

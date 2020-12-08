@@ -9,20 +9,16 @@ import { TaskSchema } from './schemas/task.schema';
 @Module({
   imports: [
     MongooseModule.forRootAsync({
-      useClass: MongoConfigService
+      useClass: MongoConfigService,
     }),
     MongooseModule.forFeature([
       {
         name: 'Task',
-        schema: TaskSchema
-      }
-    ])
+        schema: TaskSchema,
+      },
+    ]),
   ],
-  controllers: [
-    TaskController
-  ],
-  providers: [
-    TaskService
-  ]
+  controllers: [TaskController],
+  providers: [TaskService],
 })
 export class TaskModule {}

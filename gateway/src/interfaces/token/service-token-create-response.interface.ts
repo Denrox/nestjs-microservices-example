@@ -1,6 +1,6 @@
 export interface IServiveTokenCreateResponse {
   status: number;
-  token: string|null;
+  token: string | null;
   message: string;
-  errors: {[key: string]: any};
+  errors: { [key: string]: any };
 }

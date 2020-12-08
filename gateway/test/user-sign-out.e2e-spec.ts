@@ -15,7 +15,7 @@ describe('Users Sign Out (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule]
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -58,7 +58,7 @@ describe('Users Sign Out (e2e)', () => {
       .expect({
         message: 'token_destroy_success',
         errors: null,
-        data: null
+        data: null,
       })
       .end(done);
   });
@@ -72,9 +72,8 @@ describe('Users Sign Out (e2e)', () => {
       .expect({
         message: 'token_decode_unauthorized',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
-
 });

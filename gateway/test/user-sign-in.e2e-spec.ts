@@ -5,7 +5,7 @@ import { AppModule } from './../src/app.module';
 import { userSignupRequestSuccess } from './mocks/user-signup-request-success.mock';
 import {
   userLoginRequestFailWrongPw,
-  userLoginRequestFailWrongEmail
+  userLoginRequestFailWrongEmail,
 } from './mocks/user-login-request-fail.mock';
 
 describe('Users Sign In (e2e)', () => {
@@ -18,7 +18,7 @@ describe('Users Sign In (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule]
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -41,7 +41,7 @@ describe('Users Sign In (e2e)', () => {
       .expect({
         message: 'user_search_by_credentials_not_found',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -54,7 +54,7 @@ describe('Users Sign In (e2e)', () => {
       .expect({
         message: 'user_search_by_credentials_not_match',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -67,7 +67,7 @@ describe('Users Sign In (e2e)', () => {
       .expect({
         message: 'user_search_by_credentials_not_found',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -80,7 +80,7 @@ describe('Users Sign In (e2e)', () => {
       .expect({
         message: 'user_search_by_credentials_not_found',
         data: null,
-        errors: null
+        errors: null,
       })
       .end(done);
   });
@@ -96,11 +96,10 @@ describe('Users Sign In (e2e)', () => {
       .expect({
         message: 'token_create_success',
         data: {
-          token: 'fake_value'
+          token: 'fake_value',
         },
-        errors: null
+        errors: null,
       })
       .end(done);
   });
-
 });

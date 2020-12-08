@@ -12,10 +12,7 @@ import { ConfigService } from './services/config/config.service';
 
 @Module({
   imports: [],
-  controllers: [
-    UsersController,
-    TasksController
-  ],
+  controllers: [UsersController, TasksController],
   providers: [
     ConfigService,
     {
@@ -24,9 +21,7 @@ import { ConfigService } from './services/config/config.service';
         const tokenServiceOptions = configService.get('tokenService');
         return ClientProxyFactory.create(tokenServiceOptions);
       },
-      inject: [
-        ConfigService
-      ]
+      inject: [ConfigService],
     },
     {
       provide: 'USER_SERVICE',
@@ -34,36 +29,32 @@ import { ConfigService } from './services/config/config.service';
         const userServiceOptions = configService.get('userService');
         return ClientProxyFactory.create(userServiceOptions);
       },
-      inject: [
-        ConfigService
-      ]
+      inject: [ConfigService],
     },
     {
       provide: 'TASK_SERVICE',
       useFactory: (configService: ConfigService) => {
         return ClientProxyFactory.create(configService.get('taskService'));
       },
-      inject: [
-        ConfigService
-      ]
+      inject: [ConfigService],
     },
     {
       provide: 'PERMISSION_SERVICE',
       useFactory: (configService: ConfigService) => {
-        return ClientProxyFactory.create(configService.get('permissionService'));
+        return ClientProxyFactory.create(
+          configService.get('permissionService'),
+        );
       },
-      inject: [
-        ConfigService
-      ]
+      inject: [ConfigService],
     },
     {
       provide: APP_GUARD,
-      useClass: AuthGuard
+      useClass: AuthGuard,
     },
     {
       provide: APP_GUARD,
-      useClass: PermissionGuard
-    }
-  ]
+      useClass: PermissionGuard,
+    },
+  ],
 })
 export class AppModule {}

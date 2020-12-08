@@ -6,7 +6,7 @@ import { userSignupRequestSuccess } from './mocks/user-signup-request-success.mo
 import {
   userSignupRequestFailNoPw,
   userSignupRequestFailShortPw,
-  userSignupRequestFailInvalidEmail
+  userSignupRequestFailInvalidEmail,
 } from './mocks/user-signup-request-fail.mock';
 
 describe('Users Sign Up (e2e)', () => {
@@ -19,7 +19,7 @@ describe('Users Sign Up (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule]
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -44,16 +44,16 @@ describe('Users Sign Up (e2e)', () => {
             name: 'ValidatorError',
             properties: 'fake_properties',
             kind: 'required',
-            path: 'password'
+            path: 'password',
           },
           email: {
             message: 'Email can not be empty',
             name: 'ValidatorError',
             properties: 'fake_properties',
             kind: 'required',
-            path: 'email'
-          }
-        }
+            path: 'email',
+          },
+        },
       })
       .end(done);
   });
@@ -75,16 +75,16 @@ describe('Users Sign Up (e2e)', () => {
             name: 'ValidatorError',
             properties: 'fake_properties',
             kind: 'required',
-            path: 'password'
+            path: 'password',
           },
           email: {
             message: 'Email can not be empty',
             name: 'ValidatorError',
             properties: 'fake_properties',
             kind: 'required',
-            path: 'email'
-          }
-        }
+            path: 'email',
+          },
+        },
       })
       .end(done);
   });
@@ -106,9 +106,9 @@ describe('Users Sign Up (e2e)', () => {
             name: 'ValidatorError',
             properties: 'fake_properties',
             kind: 'required',
-            path: 'password'
-          }
-        }
+            path: 'password',
+          },
+        },
       })
       .end(done);
   });
@@ -131,18 +131,18 @@ describe('Users Sign Up (e2e)', () => {
             properties: 'fake_properties',
             kind: 'minlength',
             path: 'password',
-            value: userSignupRequestFailShortPw.password
-          }
-        }
+            value: userSignupRequestFailShortPw.password,
+          },
+        },
       })
       .end(done);
   });
 
-  it ('/users/ (POST) - should not create user without email', (done) => {
+  it('/users/ (POST) - should not create user without email', (done) => {
     return request(app.getHttpServer())
       .post('/users/')
       .send({
-        password: 'test111'
+        password: 'test111',
       })
       .expect(412)
       .expect((res) => {
@@ -157,14 +157,14 @@ describe('Users Sign Up (e2e)', () => {
             name: 'ValidatorError',
             properties: 'fake_properties',
             kind: 'required',
-            path: 'email'
-          }
-        }
+            path: 'email',
+          },
+        },
       })
       .end(done);
   });
 
-  it ('/users/ (POST) - should not create user with invalid email', (done) => {
+  it('/users/ (POST) - should not create user with invalid email', (done) => {
     return request(app.getHttpServer())
       .post('/users/')
       .send(userSignupRequestFailInvalidEmail)
@@ -182,14 +182,14 @@ describe('Users Sign Up (e2e)', () => {
             properties: 'fake_properties',
             kind: 'regexp',
             path: 'email',
-            value: userSignupRequestFailInvalidEmail.email
-          }
-        }
+            value: userSignupRequestFailInvalidEmail.email,
+          },
+        },
       })
       .end(done);
   });
 
-  it ('/users/ (POST) - should create a valid user', (done) => {
+  it('/users/ (POST) - should create a valid user', (done) => {
     return request(app.getHttpServer())
       .post('/users/')
       .send(userSignupRequestSuccess)
@@ -204,16 +204,16 @@ describe('Users Sign Up (e2e)', () => {
           user: {
             email: userSignupRequestSuccess.email,
             is_confirmed: false,
-            id: 'fake_value'
+            id: 'fake_value',
           },
-          token: 'fake_value'
+          token: 'fake_value',
         },
-        errors: null
+        errors: null,
       })
       .end(done);
   });
 
-  it ('/users/ (POST) - should not create user with existing email', (done) => {
+  it('/users/ (POST) - should not create user with existing email', (done) => {
     return request(app.getHttpServer())
       .post('/users/')
       .send(userSignupRequestSuccess)
@@ -224,11 +224,10 @@ describe('Users Sign Up (e2e)', () => {
         errors: {
           email: {
             message: 'Email already exists',
-            path: 'email'
-          }
-        }
+            path: 'email',
+          },
+        },
       })
       .end(done);
   });
-
 });
