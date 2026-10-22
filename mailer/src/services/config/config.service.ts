@@ -4,7 +4,7 @@ export class ConfigService {
   constructor() {
     this.envConfig = {
       port: process.env.MAILER_SERVICE_PORT,
-      emailsDisabled: process.env.MAILER_DISABLED,
+      emailsDisabled: process.env.MAILER_DISABLED === '1',
     };
   }
 
