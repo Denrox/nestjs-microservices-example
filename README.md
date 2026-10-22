@@ -11,9 +11,6 @@ Execute `docker network create infrastructure && cp .env.example .env && docker 
 - Execute `cp .env.example .env && cp .env.test.example .env.test`
 - Execute `docker compose -f ./docker-compose.test.yml up -d` from the root of the repository
 - Run `cd ./gateway && npm install && npm run test` from the root of this repo
-## Requirements
-- Node.js 24+ for running services and tests outside of docker
-- MongoDB 8 runs in docker and requires a CPU with AVX support
 ## Brief architecture overview
 This API showcase consists of the following parts:
 - API gateway
