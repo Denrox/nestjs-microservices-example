@@ -15,21 +15,21 @@ import { firstValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
 
-import { Authorization } from './decorators/authorization.decorator';
-import { Permission } from './decorators/permission.decorator';
+import { Authorization } from './decorators/authorization.decorator.js';
+import { Permission } from './decorators/permission.decorator.js';
 
-import { IAuthorizedRequest } from './interfaces/common/authorized-request.interface';
-import { IServiceTaskCreateResponse } from './interfaces/task/service-task-create-response.interface';
-import { IServiceTaskDeleteResponse } from './interfaces/task/service-task-delete-response.interface';
-import { IServiceTaskSearchByUserIdResponse } from './interfaces/task/service-task-search-by-user-id-response.interface';
-import { IServiceTaskUpdateByIdResponse } from './interfaces/task/service-task-update-by-id-response.interface';
-import { GetTasksResponseDto } from './interfaces/task/dto/get-tasks-response.dto';
-import { CreateTaskResponseDto } from './interfaces/task/dto/create-task-response.dto';
-import { DeleteTaskResponseDto } from './interfaces/task/dto/delete-task-response.dto';
-import { UpdateTaskResponseDto } from './interfaces/task/dto/update-task-response.dto';
-import { CreateTaskDto } from './interfaces/task/dto/create-task.dto';
-import { UpdateTaskDto } from './interfaces/task/dto/update-task.dto';
-import { TaskIdDto } from './interfaces/task/dto/task-id.dto';
+import { IAuthorizedRequest } from './interfaces/common/authorized-request.interface.js';
+import { IServiceTaskCreateResponse } from './interfaces/task/service-task-create-response.interface.js';
+import { IServiceTaskDeleteResponse } from './interfaces/task/service-task-delete-response.interface.js';
+import { IServiceTaskSearchByUserIdResponse } from './interfaces/task/service-task-search-by-user-id-response.interface.js';
+import { IServiceTaskUpdateByIdResponse } from './interfaces/task/service-task-update-by-id-response.interface.js';
+import { GetTasksResponseDto } from './interfaces/task/dto/get-tasks-response.dto.js';
+import { CreateTaskResponseDto } from './interfaces/task/dto/create-task-response.dto.js';
+import { DeleteTaskResponseDto } from './interfaces/task/dto/delete-task-response.dto.js';
+import { UpdateTaskResponseDto } from './interfaces/task/dto/update-task-response.dto.js';
+import { CreateTaskDto } from './interfaces/task/dto/create-task.dto.js';
+import { UpdateTaskDto } from './interfaces/task/dto/update-task.dto.js';
+import { TaskIdDto } from './interfaces/task/dto/task-id.dto.js';
 
 @Controller('tasks')
 @ApiTags('tasks')
@@ -50,9 +50,10 @@ export class TasksController {
   ): Promise<GetTasksResponseDto> {
     const userInfo = request.user;
 
-    const tasksResponse: IServiceTaskSearchByUserIdResponse = await firstValueFrom(
-      this.taskServiceClient.send('task_search_by_user_id', userInfo.id),
-    );
+    const tasksResponse: IServiceTaskSearchByUserIdResponse =
+      await firstValueFrom(
+        this.taskServiceClient.send('task_search_by_user_id', userInfo.id),
+      );
 
     return {
       message: tasksResponse.message,
@@ -150,13 +151,14 @@ export class TasksController {
     @Body() taskRequest: UpdateTaskDto,
   ): Promise<UpdateTaskResponseDto> {
     const userInfo = request.user;
-    const updateTaskResponse: IServiceTaskUpdateByIdResponse = await firstValueFrom(
-      this.taskServiceClient.send('task_update_by_id', {
-        id: params.id,
-        userId: userInfo.id,
-        task: taskRequest,
-      }),
-    );
+    const updateTaskResponse: IServiceTaskUpdateByIdResponse =
+      await firstValueFrom(
+        this.taskServiceClient.send('task_update_by_id', {
+          id: params.id,
+          userId: userInfo.id,
+          task: taskRequest,
+        }),
+      );
 
     if (updateTaskResponse.status !== HttpStatus.OK) {
       throw new HttpException(

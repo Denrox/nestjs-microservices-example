@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Query } from 'mongoose';
-import { IToken } from '../interfaces/token.interface';
+import { IToken } from '../interfaces/token.interface.js';
 
 @Injectable()
 export class TokenService {
@@ -28,7 +28,7 @@ export class TokenService {
   }
 
   public deleteTokenForUserId(userId: string): Query<any, any> {
-    return this.tokenModel.remove({
+    return this.tokenModel.deleteMany({
       user_id: userId,
     });
   }
@@ -52,7 +52,7 @@ export class TokenService {
             userId: tokenData.userId,
           };
         }
-      } catch (e) {
+      } catch {
         result = null;
       }
     }

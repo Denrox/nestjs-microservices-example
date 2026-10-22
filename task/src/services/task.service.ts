@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, UpdateResult } from 'mongoose';
 
-import { ITask } from '../interfaces/task.interface';
-import { ITaskUpdateParams } from '../interfaces/task-update-params.interface';
+import { ITask } from '../interfaces/task.interface.js';
+import { ITaskUpdateParams } from '../interfaces/task-update-params.interface.js';
 
 @Injectable()
 export class TaskService {
@@ -29,7 +29,7 @@ export class TaskService {
   public async updateTaskById(
     id: string,
     params: ITaskUpdateParams,
-  ): Promise<ITask> {
+  ): Promise<UpdateResult> {
     return await this.taskModel.updateOne({ _id: id }, params);
   }
 }

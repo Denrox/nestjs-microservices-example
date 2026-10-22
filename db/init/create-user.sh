@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-mongo ${MONGO_INITDB_DATABASE} \
+mongosh ${MONGO_INITDB_DATABASE} \
         --host localhost \
         --port 27017 \
         -u ${MONGO_INITDB_ROOT_USERNAME} \

@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as request from 'supertest';
-import * as mongoose from 'mongoose';
-import { AppModule } from '../src/app.module';
-import { userSignupRequestSuccess } from './mocks/user-signup-request-success.mock';
+import request from 'supertest';
+import mongoose from 'mongoose';
+import { AppModule } from '../src/app.module.js';
+import { userSignupRequestSuccess } from './mocks/user-signup-request-success.mock.js';
 
 describe('Users Confirm Email (e2e)', () => {
   let app;
@@ -10,7 +10,7 @@ describe('Users Confirm Email (e2e)', () => {
   let userConfirmation: any[];
 
   beforeAll(async () => {
-    await mongoose.connect(process.env.MONGO_DSN, { useNewUrlParser: true });
+    await mongoose.connect(process.env.MONGO_DSN);
     await mongoose.connection.dropDatabase();
   });
 
@@ -20,29 +20,27 @@ describe('Users Confirm Email (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.init();
+    await app.init();
   });
 
-  it('/users/ (POST) - should create a valid user', (done) => {
+  it('/users/ (POST) - should create a valid user', () => {
     return request(app.getHttpServer())
       .post('/users/')
       .send(userSignupRequestSuccess)
-      .expect(201)
-      .end(done);
+      .expect(201);
   });
 
-  it('/users/login (POST) - should create a token for valid credentials', (done) => {
+  it('/users/login (POST) - should create a token for valid credentials', () => {
     return request(app.getHttpServer())
       .post('/users/login')
       .send(userSignupRequestSuccess)
       .expect(201)
       .expect((res) => {
         userToken = res.body.data.token;
-      })
-      .end(done);
+      });
   });
 
-  it('/users/ (GET) - should return an unconfirmed user before confirmation', (done) => {
+  it('/users/ (GET) - should return an unconfirmed user before confirmation', () => {
     return request(app.getHttpServer())
       .get('/users/')
       .set('Authorization', userToken)
@@ -62,19 +60,17 @@ describe('Users Confirm Email (e2e)', () => {
           },
         },
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/users/confirm/:link (GET) - should fail to confirm with no link', (done) => {
+  it('/users/confirm/:link (GET) - should fail to confirm with no link', () => {
     return request(app.getHttpServer())
       .get('/users/confirm/')
       .send()
-      .expect(404)
-      .end(done);
+      .expect(404);
   });
 
-  it('/users/confirm/:link (GET) - should fail with invalid link', (done) => {
+  it('/users/confirm/:link (GET) - should fail with invalid link', () => {
     return request(app.getHttpServer())
       .get('/users/confirm/test')
       .send()
@@ -83,8 +79,7 @@ describe('Users Confirm Email (e2e)', () => {
         message: 'user_confirm_not_found',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 
   it('/users/confirm/:link (GET) - should succeed with a valid link', async () => {
@@ -113,7 +108,7 @@ describe('Users Confirm Email (e2e)', () => {
       });
   });
 
-  it('/users/ (GET) - should return a confirmed user after confirmation', (done) => {
+  it('/users/ (GET) - should return a confirmed user after confirmation', () => {
     return request(app.getHttpServer())
       .get('/users/')
       .set('Authorization', userToken)
@@ -133,8 +128,7 @@ describe('Users Confirm Email (e2e)', () => {
           },
         },
         errors: null,
-      })
-      .end(done);
+      });
   });
 
   it('/users/confirm/:link (GET) - should fail with a valid link second time', async () => {

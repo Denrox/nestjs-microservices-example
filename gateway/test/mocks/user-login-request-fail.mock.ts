@@ -1,4 +1,4 @@
-import { userSignupRequestSuccess } from './user-signup-request-success.mock';
+import { userSignupRequestSuccess } from './user-signup-request-success.mock.js';
 
 export const userLoginRequestFailWrongPw = {
   ...userSignupRequestSuccess,

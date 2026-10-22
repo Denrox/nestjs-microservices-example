@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_PIPE } from '@nestjs/core';
 import { ClientProxyFactory } from '@nestjs/microservices';
 
-import { UsersController } from './users.controller';
-import { TasksController } from './tasks.controller';
+import { UsersController } from './users.controller.js';
+import { TasksController } from './tasks.controller.js';
 
-import { AuthGuard } from './services/guards/authorization.guard';
-import { PermissionGuard } from './services/guards/permission.guard';
+import { AuthGuard } from './services/guards/authorization.guard.js';
+import { PermissionGuard } from './services/guards/permission.guard.js';
+import { EmptyBodyPipe } from './services/pipes/empty-body.pipe.js';
 
-import { ConfigService } from './services/config/config.service';
+import { ConfigService } from './services/config/config.service.js';
 
 @Module({
   imports: [],
@@ -54,6 +55,10 @@ import { ConfigService } from './services/config/config.service';
     {
       provide: APP_GUARD,
       useClass: PermissionGuard,
+    },
+    {
+      provide: APP_PIPE,
+      useClass: EmptyBodyPipe,
     },
   ],
 })

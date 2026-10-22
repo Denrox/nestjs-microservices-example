@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as request from 'supertest';
-import * as mongoose from 'mongoose';
-import { AppModule } from './../src/app.module';
-import { userSignupRequestSuccess } from './mocks/user-signup-request-success.mock';
+import request from 'supertest';
+import mongoose from 'mongoose';
+import { AppModule } from './../src/app.module.js';
+import { userSignupRequestSuccess } from './mocks/user-signup-request-success.mock.js';
 
 describe('Users Sign Out (e2e)', () => {
   let app;
   let userToken;
 
   beforeAll(async () => {
-    await mongoose.connect(process.env.MONGO_DSN, { useNewUrlParser: true });
+    await mongoose.connect(process.env.MONGO_DSN);
     await mongoose.connection.dropDatabase();
   });
 
@@ -22,35 +22,32 @@ describe('Users Sign Out (e2e)', () => {
     await app.init();
   });
 
-  it('/users/ (POST) - should create a valid user', (done) => {
+  it('/users/ (POST) - should create a valid user', () => {
     return request(app.getHttpServer())
       .post('/users/')
       .send(userSignupRequestSuccess)
-      .expect(201)
-      .end(done);
+      .expect(201);
   });
 
-  it('/users/login (POST) - should create a token for valid credentials', (done) => {
+  it('/users/login (POST) - should create a token for valid credentials', () => {
     return request(app.getHttpServer())
       .post('/users/login')
       .send(userSignupRequestSuccess)
       .expect(201)
       .expect((res) => {
         userToken = res.body.data.token;
-      })
-      .end(done);
+      });
   });
 
-  it('/users/ (GET) - should retrieve user by a valid token', (done) => {
+  it('/users/ (GET) - should retrieve user by a valid token', () => {
     return request(app.getHttpServer())
       .get('/users/')
       .set('Authorization', userToken)
       .send()
-      .expect(200)
-      .end(done);
+      .expect(200);
   });
 
-  it('/users/logout (POST) - should destroy token for user', (done) => {
+  it('/users/logout (POST) - should destroy token for user', () => {
     return request(app.getHttpServer())
       .put('/users/logout')
       .set('Authorization', userToken)
@@ -59,11 +56,10 @@ describe('Users Sign Out (e2e)', () => {
         message: 'token_destroy_success',
         errors: null,
         data: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/users/ (GET) - should not retrieve user by a destroyed token', (done) => {
+  it('/users/ (GET) - should not retrieve user by a destroyed token', () => {
     return request(app.getHttpServer())
       .get('/users/')
       .set('Authorization', userToken)
@@ -73,7 +69,6 @@ describe('Users Sign Out (e2e)', () => {
         message: 'token_decode_unauthorized',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 });

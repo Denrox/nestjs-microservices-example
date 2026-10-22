@@ -1,19 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as mongoose from 'mongoose';
-import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
-import { userSignupRequestSuccess } from './mocks/user-signup-request-success.mock';
+import mongoose from 'mongoose';
+import request from 'supertest';
+import { AppModule } from './../src/app.module.js';
+import { userSignupRequestSuccess } from './mocks/user-signup-request-success.mock.js';
 import {
   userSignupRequestFailNoPw,
   userSignupRequestFailShortPw,
   userSignupRequestFailInvalidEmail,
-} from './mocks/user-signup-request-fail.mock';
+} from './mocks/user-signup-request-fail.mock.js';
 
 describe('Users Sign Up (e2e)', () => {
   let app;
 
   beforeAll(async () => {
-    await mongoose.connect(process.env.MONGO_DSN, { useNewUrlParser: true });
+    await mongoose.connect(process.env.MONGO_DSN);
     await mongoose.connection.dropDatabase();
   });
 
@@ -26,7 +26,7 @@ describe('Users Sign Up (e2e)', () => {
     await app.init();
   });
 
-  it('/users/ (POST) - should not create user without request body', (done) => {
+  it('/users/ (POST) - should not create user without request body', () => {
     return request(app.getHttpServer())
       .post('/users/')
       .send()
@@ -54,11 +54,10 @@ describe('Users Sign Up (e2e)', () => {
             path: 'email',
           },
         },
-      })
-      .end(done);
+      });
   });
 
-  it('/users/ (POST) - should not create a user if request body is string', (done) => {
+  it('/users/ (POST) - should not create a user if request body is string', () => {
     return request(app.getHttpServer())
       .post('/users/')
       .send('test')
@@ -85,11 +84,10 @@ describe('Users Sign Up (e2e)', () => {
             path: 'email',
           },
         },
-      })
-      .end(done);
+      });
   });
 
-  it('/users/ (POST) - should not create user without password', (done) => {
+  it('/users/ (POST) - should not create user without password', () => {
     return request(app.getHttpServer())
       .post('/users/')
       .send(userSignupRequestFailNoPw)
@@ -109,11 +107,10 @@ describe('Users Sign Up (e2e)', () => {
             path: 'password',
           },
         },
-      })
-      .end(done);
+      });
   });
 
-  it('/users/ (POST) - should not create user if password is short', (done) => {
+  it('/users/ (POST) - should not create user if password is short', () => {
     return request(app.getHttpServer())
       .post('/users/')
       .send(userSignupRequestFailShortPw)
@@ -134,11 +131,10 @@ describe('Users Sign Up (e2e)', () => {
             value: userSignupRequestFailShortPw.password,
           },
         },
-      })
-      .end(done);
+      });
   });
 
-  it('/users/ (POST) - should not create user without email', (done) => {
+  it('/users/ (POST) - should not create user without email', () => {
     return request(app.getHttpServer())
       .post('/users/')
       .send({
@@ -160,11 +156,10 @@ describe('Users Sign Up (e2e)', () => {
             path: 'email',
           },
         },
-      })
-      .end(done);
+      });
   });
 
-  it('/users/ (POST) - should not create user with invalid email', (done) => {
+  it('/users/ (POST) - should not create user with invalid email', () => {
     return request(app.getHttpServer())
       .post('/users/')
       .send(userSignupRequestFailInvalidEmail)
@@ -185,11 +180,10 @@ describe('Users Sign Up (e2e)', () => {
             value: userSignupRequestFailInvalidEmail.email,
           },
         },
-      })
-      .end(done);
+      });
   });
 
-  it('/users/ (POST) - should create a valid user', (done) => {
+  it('/users/ (POST) - should create a valid user', () => {
     return request(app.getHttpServer())
       .post('/users/')
       .send(userSignupRequestSuccess)
@@ -209,11 +203,10 @@ describe('Users Sign Up (e2e)', () => {
           token: 'fake_value',
         },
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/users/ (POST) - should not create user with existing email', (done) => {
+  it('/users/ (POST) - should not create user with existing email', () => {
     return request(app.getHttpServer())
       .post('/users/')
       .send(userSignupRequestSuccess)
@@ -227,7 +220,6 @@ describe('Users Sign Up (e2e)', () => {
             path: 'email',
           },
         },
-      })
-      .end(done);
+      });
   });
 });

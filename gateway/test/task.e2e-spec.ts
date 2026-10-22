@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as request from 'supertest';
-import * as mongoose from 'mongoose';
-import { AppModule } from './../src/app.module';
-import { userSignupRequestSuccess } from './mocks/user-signup-request-success.mock';
-import { taskCreateRequestSuccess } from './mocks/task-create-request-success.mock';
-import { taskUpdateRequestSuccess } from './mocks/task-update-request-success.mock';
+import request from 'supertest';
+import mongoose from 'mongoose';
+import { AppModule } from './../src/app.module.js';
+import { userSignupRequestSuccess } from './mocks/user-signup-request-success.mock.js';
+import { taskCreateRequestSuccess } from './mocks/task-create-request-success.mock.js';
+import { taskUpdateRequestSuccess } from './mocks/task-update-request-success.mock.js';
 
 describe('Tasks (e2e)', () => {
   let app;
@@ -13,7 +13,7 @@ describe('Tasks (e2e)', () => {
   let userToken: string;
 
   beforeAll(async () => {
-    await mongoose.connect(process.env.MONGO_DSN, { useNewUrlParser: true });
+    await mongoose.connect(process.env.MONGO_DSN);
     await mongoose.connection.dropDatabase();
   });
 
@@ -26,50 +26,40 @@ describe('Tasks (e2e)', () => {
     await app.init();
   });
 
-  it('/users/ (POST) - should create a user for checking tasks api', (done) => {
+  it('/users/ (POST) - should create a user for checking tasks api', () => {
     return request(app.getHttpServer())
       .post('/users/')
       .send(userSignupRequestSuccess)
-      .expect(201)
-      .end(done);
+      .expect(201);
   });
 
-  it('/users/login (POST) - should create a token for valid credentials', (done) => {
+  it('/users/login (POST) - should create a token for valid credentials', () => {
     return request(app.getHttpServer())
       .post('/users/login')
       .send(userSignupRequestSuccess)
       .expect(201)
       .expect((res) => {
         userToken = res.body.data.token;
-      })
-      .end(done);
+      });
   });
 
-  it('/tasks (GET) - should not return tasks without valid token', (done) => {
-    return request(app.getHttpServer())
-      .get('/tasks')
-      .expect(401)
-      .expect({
-        message: 'token_decode_unauthorized',
-        data: null,
-        errors: null,
-      })
-      .end(done);
+  it('/tasks (GET) - should not return tasks without valid token', () => {
+    return request(app.getHttpServer()).get('/tasks').expect(401).expect({
+      message: 'token_decode_unauthorized',
+      data: null,
+      errors: null,
+    });
   });
 
-  it('/tasks (POST) - should not create a task without a valid token', (done) => {
-    return request(app.getHttpServer())
-      .post('/tasks')
-      .expect(401)
-      .expect({
-        message: 'token_decode_unauthorized',
-        data: null,
-        errors: null,
-      })
-      .end(done);
+  it('/tasks (POST) - should not create a task without a valid token', () => {
+    return request(app.getHttpServer()).post('/tasks').expect(401).expect({
+      message: 'token_decode_unauthorized',
+      data: null,
+      errors: null,
+    });
   });
 
-  it('/tasks (POST) - should not create a task with an invalid token', (done) => {
+  it('/tasks (POST) - should not create a task with an invalid token', () => {
     return request(app.getHttpServer())
       .post('/tasks')
       .set('Authorization', userToken + 1)
@@ -79,11 +69,10 @@ describe('Tasks (e2e)', () => {
         message: 'token_decode_unauthorized',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/tasks (POST) - should not create a task for an unconfirmed user with valid token', (done) => {
+  it('/tasks (POST) - should not create a task for an unconfirmed user with valid token', () => {
     return request(app.getHttpServer())
       .post('/tasks')
       .set('Authorization', userToken)
@@ -93,23 +82,18 @@ describe('Tasks (e2e)', () => {
         message: 'permission_check_forbidden',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/tasks (GET) - should not retrieve tasks without a valid token', (done) => {
-    return request(app.getHttpServer())
-      .get('/tasks')
-      .expect(401)
-      .expect({
-        message: 'token_decode_unauthorized',
-        data: null,
-        errors: null,
-      })
-      .end(done);
+  it('/tasks (GET) - should not retrieve tasks without a valid token', () => {
+    return request(app.getHttpServer()).get('/tasks').expect(401).expect({
+      message: 'token_decode_unauthorized',
+      data: null,
+      errors: null,
+    });
   });
 
-  it('/tasks (GET) - should not retrieve tasks with an valid token', (done) => {
+  it('/tasks (GET) - should not retrieve tasks with an valid token', () => {
     return request(app.getHttpServer())
       .get('/tasks')
       .set('Authorization', userToken + 1)
@@ -118,11 +102,10 @@ describe('Tasks (e2e)', () => {
         message: 'token_decode_unauthorized',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/tasks (POST) - should not retrieve tasks for an unconfirmed user with valid token', (done) => {
+  it('/tasks (POST) - should not retrieve tasks for an unconfirmed user with valid token', () => {
     return request(app.getHttpServer())
       .get('/tasks')
       .set('Authorization', userToken)
@@ -131,8 +114,7 @@ describe('Tasks (e2e)', () => {
         message: 'permission_check_forbidden',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 
   it('/users/confirm/:link (GET) - should confirm user', async () => {
@@ -160,7 +142,7 @@ describe('Tasks (e2e)', () => {
       });
   });
 
-  it('/tasks (POST) - should create a task for the user with a valid token', (done) => {
+  it('/tasks (POST) - should create a task for the user with a valid token', () => {
     return request(app.getHttpServer())
       .post('/tasks')
       .set('Authorization', userToken)
@@ -189,11 +171,10 @@ describe('Tasks (e2e)', () => {
           },
         },
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/tasks (POST) - should not create a task with invalid params', (done) => {
+  it('/tasks (POST) - should not create a task with invalid params', () => {
     return request(app.getHttpServer())
       .post('/tasks')
       .set('Authorization', userToken)
@@ -230,11 +211,10 @@ describe('Tasks (e2e)', () => {
             path: 'name',
           },
         },
-      })
-      .end(done);
+      });
   });
 
-  it('/tasks (GET) - should retrieve tasks for a valid token', (done) => {
+  it('/tasks (GET) - should retrieve tasks for a valid token', () => {
     return request(app.getHttpServer())
       .get('/tasks')
       .set('Authorization', userToken)
@@ -262,11 +242,10 @@ describe('Tasks (e2e)', () => {
           ],
         },
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/tasks/{id} (PUT) - should not task with invalid token', (done) => {
+  it('/tasks/{id} (PUT) - should not task with invalid token', () => {
     return request(app.getHttpServer())
       .put(`/tasks/${taskId}`)
       .send(taskUpdateRequestSuccess)
@@ -275,11 +254,10 @@ describe('Tasks (e2e)', () => {
         message: 'token_decode_unauthorized',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/tasks/{id} (PUT) - should not update task with user_id param', (done) => {
+  it('/tasks/{id} (PUT) - should not update task with user_id param', () => {
     return request(app.getHttpServer())
       .put(`/tasks/${taskId}`)
       .set('Authorization', userToken)
@@ -303,11 +281,10 @@ describe('Tasks (e2e)', () => {
             path: 'user_id',
           },
         },
-      })
-      .end(done);
+      });
   });
 
-  it('/tasks/{id} (PUT) - should update task with valid params', (done) => {
+  it('/tasks/{id} (PUT) - should update task with valid params', () => {
     return request(app.getHttpServer())
       .put(`/tasks/${taskId}`)
       .set('Authorization', userToken)
@@ -334,11 +311,10 @@ describe('Tasks (e2e)', () => {
           },
         },
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/tasks/{id} (DELETE) - should not delete task with invalid token', (done) => {
+  it('/tasks/{id} (DELETE) - should not delete task with invalid token', () => {
     return request(app.getHttpServer())
       .delete(`/tasks/${taskId}`)
       .send()
@@ -347,11 +323,10 @@ describe('Tasks (e2e)', () => {
         message: 'token_decode_unauthorized',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/tasks/{id} (DELETE) - should delete task with a valid token', (done) => {
+  it('/tasks/{id} (DELETE) - should delete task with a valid token', () => {
     return request(app.getHttpServer())
       .delete(`/tasks/${taskId}`)
       .set('Authorization', userToken)
@@ -361,7 +336,6 @@ describe('Tasks (e2e)', () => {
         message: 'task_delete_by_id_success',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 });

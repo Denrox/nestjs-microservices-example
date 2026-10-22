@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 function transformValue(doc, ret: { [key: string]: any }) {
   delete ret._id;
@@ -20,7 +20,7 @@ export const UserLinkSchema = new mongoose.Schema(
     },
     link: {
       type: String,
-      default: generateLink(),
+      default: generateLink,
     },
   },
   {

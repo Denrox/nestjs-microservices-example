@@ -1,5 +1,5 @@
-import * as mongoose from 'mongoose';
-import { ITask } from '../interfaces/task.interface';
+import mongoose from 'mongoose';
+import { ITask } from '../interfaces/task.interface.js';
 
 function transformValue(doc, ret: { [key: string]: any }) {
   delete ret._id;
@@ -52,11 +52,10 @@ export const TaskSchema = new mongoose.Schema(
   },
 );
 
-TaskSchema.pre('validate', function (next) {
+TaskSchema.pre('validate', function () {
   const self = this as ITask;
 
   if (this.isModified('user_id') && self.created_at) {
     this.invalidate('user_id', 'The field value can not be updated');
   }
-  next();
 });

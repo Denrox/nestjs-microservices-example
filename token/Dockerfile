@@ -1,7 +1,5 @@
-FROM node:14.8.0-alpine
-RUN npm install -g npm@6.14.7
-RUN mkdir -p /var/www/token
+FROM node:24-alpine
 WORKDIR /var/www/token
-ADD . /var/www/token
-RUN npm install
+COPY . /var/www/token
+RUN npm ci
 CMD npm run build && npm run start:prod

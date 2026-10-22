@@ -1,5 +1,5 @@
-import { IPermissionStrategy } from '../interfaces/permission-strategy.interface';
-import { IUser } from '../interfaces/user.interface';
+import { IPermissionStrategy } from '../interfaces/permission-strategy.interface.js';
+import { IUser } from '../interfaces/user.interface.js';
 
 export class ConfirmedStrategyService implements IPermissionStrategy {
   public getAllowedPermissions(user: IUser, permissions: string[]): string[] {

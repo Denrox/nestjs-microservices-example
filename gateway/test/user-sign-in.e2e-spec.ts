@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import * as request from 'supertest';
-import * as mongoose from 'mongoose';
-import { AppModule } from './../src/app.module';
-import { userSignupRequestSuccess } from './mocks/user-signup-request-success.mock';
+import request from 'supertest';
+import mongoose from 'mongoose';
+import { AppModule } from './../src/app.module.js';
+import { userSignupRequestSuccess } from './mocks/user-signup-request-success.mock.js';
 import {
   userLoginRequestFailWrongPw,
   userLoginRequestFailWrongEmail,
-} from './mocks/user-login-request-fail.mock';
+} from './mocks/user-login-request-fail.mock.js';
 
 describe('Users Sign In (e2e)', () => {
   let app;
 
   beforeAll(async () => {
-    await mongoose.connect(process.env.MONGO_DSN, { useNewUrlParser: true });
+    await mongoose.connect(process.env.MONGO_DSN);
     await mongoose.connection.dropDatabase();
   });
 
@@ -25,15 +25,14 @@ describe('Users Sign In (e2e)', () => {
     await app.init();
   });
 
-  it('/users/ (POST) - should create a valid user', (done) => {
+  it('/users/ (POST) - should create a valid user', () => {
     return request(app.getHttpServer())
       .post('/users/')
       .send(userSignupRequestSuccess)
-      .expect(201)
-      .end(done);
+      .expect(201);
   });
 
-  it('/users/login (POST) - should not create a token for invalid email', (done) => {
+  it('/users/login (POST) - should not create a token for invalid email', () => {
     return request(app.getHttpServer())
       .post('/users/login')
       .send(userLoginRequestFailWrongEmail)
@@ -42,11 +41,10 @@ describe('Users Sign In (e2e)', () => {
         message: 'user_search_by_credentials_not_found',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/users/login (POST) - should not create a token for invalid password', (done) => {
+  it('/users/login (POST) - should not create a token for invalid password', () => {
     return request(app.getHttpServer())
       .post('/users/login')
       .send(userLoginRequestFailWrongPw)
@@ -55,11 +53,10 @@ describe('Users Sign In (e2e)', () => {
         message: 'user_search_by_credentials_not_match',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/users/login (POST) - should not create a token for empty body', (done) => {
+  it('/users/login (POST) - should not create a token for empty body', () => {
     return request(app.getHttpServer())
       .post('/users/login')
       .send()
@@ -68,11 +65,10 @@ describe('Users Sign In (e2e)', () => {
         message: 'user_search_by_credentials_not_found',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/users/login (POST) - should not create a token for string value in body', (done) => {
+  it('/users/login (POST) - should not create a token for string value in body', () => {
     return request(app.getHttpServer())
       .post('/users/login')
       .send(userSignupRequestSuccess.email)
@@ -81,11 +77,10 @@ describe('Users Sign In (e2e)', () => {
         message: 'user_search_by_credentials_not_found',
         data: null,
         errors: null,
-      })
-      .end(done);
+      });
   });
 
-  it('/users/login (POST) - should create a token for valid credentials', (done) => {
+  it('/users/login (POST) - should create a token for valid credentials', () => {
     return request(app.getHttpServer())
       .post('/users/login')
       .send(userSignupRequestSuccess)
@@ -99,7 +94,6 @@ describe('Users Sign In (e2e)', () => {
           token: 'fake_value',
         },
         errors: null,
-      })
-      .end(done);
+      });
   });
 });

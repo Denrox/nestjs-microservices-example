@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ITask } from '../task.interface';
+import { ITask } from '../task.interface.js';
 
 export class UpdateTaskResponseDto {
   @ApiProperty({ example: 'task_update_by_id_success' })

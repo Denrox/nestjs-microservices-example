@@ -1,9 +1,9 @@
 import { Controller, HttpStatus } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { ConfirmedStrategyService } from './services/confirmed-strategy.service';
-import { permissions } from './constants/permissions';
-import { IPermissionCheckResponse } from './interfaces/permission-check-response.interface';
-import { IUser } from './interfaces/user.interface';
+import { ConfirmedStrategyService } from './services/confirmed-strategy.service.js';
+import { permissions } from './constants/permissions.js';
+import { IPermissionCheckResponse } from './interfaces/permission-check-response.interface.js';
+import { IUser } from './interfaces/user.interface.js';
 
 @Controller()
 export class PermissionController {
