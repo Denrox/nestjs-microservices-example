@@ -1,5 +1,5 @@
-import * as mongoose from 'mongoose';
-import * as bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = 10;
 
@@ -22,7 +22,7 @@ export const UserSchema = new mongoose.Schema<IUserSchema>(
       type: String,
       required: [true, 'Email can not be empty'],
       match: [
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
         'Email should be valid',
       ],
     },
@@ -60,10 +60,9 @@ UserSchema.methods.compareEncryptedPassword = function (password: string) {
   return bcrypt.compare(password, this.password);
 };
 
-UserSchema.pre('save', async function (next) {
+UserSchema.pre('save', async function () {
   if (!this.isModified('password')) {
-    return next();
+    return;
   }
   this.password = await this.getEncryptedPassword(this.password);
-  next();
 });

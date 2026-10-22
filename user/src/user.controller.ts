@@ -1,11 +1,12 @@
 import { Controller, HttpStatus, Inject } from '@nestjs/common';
 import { MessagePattern, ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 
-import { UserService } from './services/user.service';
-import { IUser } from './interfaces/user.interface';
-import { IUserCreateResponse } from './interfaces/user-create-response.interface';
-import { IUserSearchResponse } from './interfaces/user-search-response.interface';
-import { IUserConfirmResponse } from './interfaces/user-confirm-response.interface';
+import { UserService } from './services/user.service.js';
+import { IUser } from './interfaces/user.interface.js';
+import { IUserCreateResponse } from './interfaces/user-create-response.interface.js';
+import { IUserSearchResponse } from './interfaces/user-search-response.interface.js';
+import { IUserConfirmResponse } from './interfaces/user-confirm-response.interface.js';
 
 @Controller('user')
 export class UserController {
@@ -163,8 +164,8 @@ export class UserController {
             user: createdUser,
             errors: null,
           };
-          this.mailerServiceClient
-            .send('mail_send', {
+          firstValueFrom(
+            this.mailerServiceClient.send('mail_send', {
               to: createdUser.email,
               subject: 'Email confirmation',
               html: `<center>
@@ -174,8 +175,8 @@ export class UserController {
                 userLink.link,
               )}"><b>Confirm The Email</b></a>
               </center>`,
-            })
-            .toPromise();
+            }),
+          ).catch(() => null);
         } catch (e) {
           result = {
             status: HttpStatus.PRECONDITION_FAILED,

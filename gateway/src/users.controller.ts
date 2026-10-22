@@ -14,23 +14,23 @@ import { firstValueFrom } from 'rxjs';
 import { ClientProxy } from '@nestjs/microservices';
 import { ApiTags, ApiOkResponse, ApiCreatedResponse } from '@nestjs/swagger';
 
-import { Authorization } from './decorators/authorization.decorator';
-import { IAuthorizedRequest } from './interfaces/common/authorized-request.interface';
-import { IServiceUserCreateResponse } from './interfaces/user/service-user-create-response.interface';
-import { IServiceUserSearchResponse } from './interfaces/user/service-user-search-response.interface';
-import { IServiveTokenCreateResponse } from './interfaces/token/service-token-create-response.interface';
-import { IServiceTokenDestroyResponse } from './interfaces/token/service-token-destroy-response.interface';
-import { IServiceUserConfirmResponse } from './interfaces/user/service-user-confirm-response.interface';
-import { IServiceUserGetByIdResponse } from './interfaces/user/service-user-get-by-id-response.interface';
+import { Authorization } from './decorators/authorization.decorator.js';
+import { IAuthorizedRequest } from './interfaces/common/authorized-request.interface.js';
+import { IServiceUserCreateResponse } from './interfaces/user/service-user-create-response.interface.js';
+import { IServiceUserSearchResponse } from './interfaces/user/service-user-search-response.interface.js';
+import { IServiveTokenCreateResponse } from './interfaces/token/service-token-create-response.interface.js';
+import { IServiceTokenDestroyResponse } from './interfaces/token/service-token-destroy-response.interface.js';
+import { IServiceUserConfirmResponse } from './interfaces/user/service-user-confirm-response.interface.js';
+import { IServiceUserGetByIdResponse } from './interfaces/user/service-user-get-by-id-response.interface.js';
 
-import { GetUserByTokenResponseDto } from './interfaces/user/dto/get-user-by-token-response.dto';
-import { CreateUserDto } from './interfaces/user/dto/create-user.dto';
-import { CreateUserResponseDto } from './interfaces/user/dto/create-user-response.dto';
-import { LoginUserDto } from './interfaces/user/dto/login-user.dto';
-import { LoginUserResponseDto } from './interfaces/user/dto/login-user-response.dto';
-import { LogoutUserResponseDto } from './interfaces/user/dto/logout-user-response.dto';
-import { ConfirmUserDto } from './interfaces/user/dto/confirm-user.dto';
-import { ConfirmUserResponseDto } from './interfaces/user/dto/confirm-user-response.dto';
+import { GetUserByTokenResponseDto } from './interfaces/user/dto/get-user-by-token-response.dto.js';
+import { CreateUserDto } from './interfaces/user/dto/create-user.dto.js';
+import { CreateUserResponseDto } from './interfaces/user/dto/create-user-response.dto.js';
+import { LoginUserDto } from './interfaces/user/dto/login-user.dto.js';
+import { LoginUserResponseDto } from './interfaces/user/dto/login-user-response.dto.js';
+import { LogoutUserResponseDto } from './interfaces/user/dto/logout-user-response.dto.js';
+import { ConfirmUserDto } from './interfaces/user/dto/confirm-user.dto.js';
+import { ConfirmUserResponseDto } from './interfaces/user/dto/confirm-user-response.dto.js';
 
 @Controller('users')
 @ApiTags('users')
@@ -84,11 +84,12 @@ export class UsersController {
       );
     }
 
-    const createTokenResponse: IServiveTokenCreateResponse = await firstValueFrom(
-      this.tokenServiceClient.send('token_create', {
-        userId: createUserResponse.user.id,
-      }),
-    );
+    const createTokenResponse: IServiveTokenCreateResponse =
+      await firstValueFrom(
+        this.tokenServiceClient.send('token_create', {
+          userId: createUserResponse.user.id,
+        }),
+      );
 
     return {
       message: createUserResponse.message,
@@ -122,11 +123,12 @@ export class UsersController {
       );
     }
 
-    const createTokenResponse: IServiveTokenCreateResponse = await firstValueFrom(
-      this.tokenServiceClient.send('token_create', {
-        userId: getUserResponse.user.id,
-      }),
-    );
+    const createTokenResponse: IServiveTokenCreateResponse =
+      await firstValueFrom(
+        this.tokenServiceClient.send('token_create', {
+          userId: getUserResponse.user.id,
+        }),
+      );
 
     return {
       message: createTokenResponse.message,
@@ -147,11 +149,12 @@ export class UsersController {
   ): Promise<LogoutUserResponseDto> {
     const userInfo = request.user;
 
-    const destroyTokenResponse: IServiceTokenDestroyResponse = await firstValueFrom(
-      this.tokenServiceClient.send('token_destroy', {
-        userId: userInfo.id,
-      }),
-    );
+    const destroyTokenResponse: IServiceTokenDestroyResponse =
+      await firstValueFrom(
+        this.tokenServiceClient.send('token_destroy', {
+          userId: userInfo.id,
+        }),
+      );
 
     if (destroyTokenResponse.status !== HttpStatus.OK) {
       throw new HttpException(
@@ -178,11 +181,12 @@ export class UsersController {
   public async confirmUser(
     @Param() params: ConfirmUserDto,
   ): Promise<ConfirmUserResponseDto> {
-    const confirmUserResponse: IServiceUserConfirmResponse = await firstValueFrom(
-      this.userServiceClient.send('user_confirm', {
-        link: params.link,
-      }),
-    );
+    const confirmUserResponse: IServiceUserConfirmResponse =
+      await firstValueFrom(
+        this.userServiceClient.send('user_confirm', {
+          link: params.link,
+        }),
+      );
 
     if (confirmUserResponse.status !== HttpStatus.OK) {
       throw new HttpException(

@@ -1,4 +1,4 @@
-import { MailerOptionsFactory, MailerOptions } from '@nest-modules/mailer';
+import { MailerOptionsFactory, MailerOptions } from '@nestjs-modules/mailer';
 
 export class MailerConfigService implements MailerOptionsFactory {
   createMailerOptions(): MailerOptions {

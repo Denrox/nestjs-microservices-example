@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IUser } from '../user.interface';
+import { IUser } from '../user.interface.js';
 
 export class GetUserByTokenResponseDto {
   @ApiProperty({ example: 'user_get_by_id_success' })

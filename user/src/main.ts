@@ -1,8 +1,8 @@
 import { NestFactory } from '@nestjs/core';
-import { UserModule } from './user.module';
+import { UserModule } from './user.module.js';
 import { Transport, TcpOptions } from '@nestjs/microservices';
 
-import { ConfigService } from './services/config/config.service';
+import { ConfigService } from './services/config/config.service.js';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice(UserModule, {
@@ -12,6 +12,6 @@ async function bootstrap() {
       port: new ConfigService().get('port'),
     },
   } as TcpOptions);
-  await app.listenAsync();
+  await app.listen();
 }
 bootstrap();

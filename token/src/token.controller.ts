@@ -1,9 +1,9 @@
 import { Controller, HttpStatus } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { TokenService } from './services/token.service';
-import { ITokenResponse } from './interfaces/token-response.interface';
-import { ITokenDataResponse } from './interfaces/token-data-response.interface';
-import { ITokenDestroyResponse } from './interfaces/token-destroy-response.interface';
+import { TokenService } from './services/token.service.js';
+import { ITokenResponse } from './interfaces/token-response.interface.js';
+import { ITokenDataResponse } from './interfaces/token-data-response.interface.js';
+import { ITokenDestroyResponse } from './interfaces/token-destroy-response.interface.js';
 
 @Controller('token')
 export class TokenController {
@@ -20,7 +20,7 @@ export class TokenController {
           message: 'token_create_success',
           token: createResult.token,
         };
-      } catch (e) {
+      } catch {
         result = {
           status: HttpStatus.BAD_REQUEST,
           message: 'token_create_bad_request',

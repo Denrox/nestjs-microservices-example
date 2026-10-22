@@ -1,13 +1,13 @@
 import { Controller, HttpStatus } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 
-import { TaskService } from './services/task.service';
-import { ITask } from './interfaces/task.interface';
-import { ITaskUpdateParams } from './interfaces/task-update-params.interface';
-import { ITaskSearchByUserResponse } from './interfaces/task-search-by-user-response.interface';
-import { ITaskDeleteResponse } from './interfaces/task-delete-response.interface';
-import { ITaskCreateResponse } from './interfaces/task-create-response.interface';
-import { ITaskUpdateByIdResponse } from './interfaces/task-update-by-id-response.interface';
+import { TaskService } from './services/task.service.js';
+import { ITask } from './interfaces/task.interface.js';
+import { ITaskUpdateParams } from './interfaces/task-update-params.interface.js';
+import { ITaskSearchByUserResponse } from './interfaces/task-search-by-user-response.interface.js';
+import { ITaskDeleteResponse } from './interfaces/task-delete-response.interface.js';
+import { ITaskCreateResponse } from './interfaces/task-create-response.interface.js';
+import { ITaskUpdateByIdResponse } from './interfaces/task-update-by-id-response.interface.js';
 
 @Controller()
 export class TaskController {
@@ -161,7 +161,7 @@ export class TaskController {
             errors: null,
           };
         }
-      } catch (e) {
+      } catch {
         result = {
           status: HttpStatus.FORBIDDEN,
           message: 'task_delete_by_id_forbidden',
